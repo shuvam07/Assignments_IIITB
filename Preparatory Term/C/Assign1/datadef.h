@@ -1,0 +1,2 @@
+#define N 150000
+#define MAX_RANGE 100000

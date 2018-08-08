@@ -1,0 +1,8 @@
+2) 
+
+C is a compiled language while python is interpreted. That means we will probably need bulkier software on the system where we need to run our interpreted code.
+
+Python has object oriented capabilities which C doesn't.
+
+Python is clean and compact while C is a bit difficult to code in unlike python.
+

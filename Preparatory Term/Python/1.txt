@@ -1,0 +1,49 @@
+1. 
+
+a) Compilation and Interpretation
+
+Interpretation: An interpreter reads a program line by line, reading every expression and gives output if the program is correct. It stops/gives error when it encounters the first mistake in any line of code. 
+
+Compilation: In this, a compiler reads the program in one go and gives output if the program is correct else an error. 
+
+Both, Interpreter & Compiler are special programs that converts a program into machine language.
+
+b) native code and byte code
+
+Native code is computer programming (code) that is compiled to run with a particular processor (such as an Intel x86-class processor) and its set of instructions. If the same program is run on a computer with a different processor, software can be provided so that the computer emulates the original processor.
+
+Bytecode is computer object code that is processed by a program, usually referred to as a virtual machine, rather than by the "real" computer machine, the hardware processor. The virtual machine converts each generalized machine instruction into a specific machine instruction or instructions that this computer's processor will understand.
+
+c) virtual  machine
+
+A virtual machine is a computer file, typically called an image, which behaves like an actual computer. In other words, creating a computer within a computer. It runs in a window, much like any other programme, giving the end user the same experience on a virtual machine as they would have on the host operating system itself.
+
+d and e) Variables
+
+Variables are used to store information to be referenced and manipulated in a computer program. They also provide a way of labeling data with a descriptive name, so our programs can be understood more clearly by the reader and ourselves. It is helpful to think of variables as containers that hold information. Their sole purpose is to label and store data in memory. This data can then be used throughout your program.
+
+f) Data Types
+
+A data type, in programming, is a classification that specifies which type of value a variable has and what type of mathematical, relational or logical operations can be applied to it without causing an error.
+
+g) Data types in python as opposed to c
+
+Other programming languages like c often determine whether an operation makes sense for an object by making sure the object can never be stored somewhere where the operation will be performed on the object (this type system is called static typing). Python does not do that. Instead it stores the type of an object with the object, and checks when the operation is performed whether that operation makes sense for that object (this is called dynamic typing).
+
+h) Syntax
+
+syntax of a computer language is the set of rules that defines the combinations of symbols that are considered to be a correctly structured document or fragment in that language.
+
+i) Need for int and float
+
+"int" means integer. It's either one whole number or the next or previous. A "float" is a floating-point number - that is, a number and part of a number.
+
+3 is an int
+
+3.14 is a float
+
+If we need to store/represent a value that can be between integers, we could use a float.
+
+j) Integrated Development environment
+
+An integrated development environment (IDE) is a software application that provides comprehensive facilities to computer programmers for software development. An IDE normally consists of a source code editor, build automation tools, and a debugger.
