@@ -18,10 +18,10 @@ int main(void)
 
    tv.tv_sec = 5;						// time it has to wait for data(5sec here)
    tv.tv_usec = 0;                                              // time in microsecond
-   unsigned int fd=open("abc.txt",0777);
+   unsigned int fd=open("abc_10.txt",0777);
    unsigned int wd=dup(fd);
-   printf("%u %u",rfds,wd);
-   retval = select((rfds>wd?rfds:wd)+1, &rfds, &wd, NULL, &tv);    		 // will wait if no data is in read,write or exe file descriptor 
+   //printf("%u %u",rfds,wd);
+   retval = select(1, &rfds, &wd, NULL, &tv);    		 // will wait if no data is in read,write or exe file descriptor 
 
 
    if (retval == -1)

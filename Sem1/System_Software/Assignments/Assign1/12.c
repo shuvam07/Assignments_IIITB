@@ -14,7 +14,7 @@ int main(){
 	char c;
 	int fd = open("abc_10.txt",O_RDWR);
 	int mode = fcntl(fd,F_GETFL);
-	int accmode = mode & O_ACCMODE;
+	int accmode = mode & O_ACCMODE;                       //O_ACCMODE sets the specific bits (acts as bitmask)
 	if(accmode == O_RDONLY) printf("read only\n");
 	if(accmode == O_WRONLY) printf("write only\n");
 	if(accmode == O_RDWR) printf("read write\n");
