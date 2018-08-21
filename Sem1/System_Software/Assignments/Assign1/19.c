@@ -13,6 +13,7 @@ int main(){
      	double cpu_time_used;
      	start = clock();
         int pid = getpid();
+	//sleep(1);
      	end = clock();
      	cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
 	printf("pid = %d\nTime Elapsed(in sec) = %f\n",pid,cpu_time_used);
