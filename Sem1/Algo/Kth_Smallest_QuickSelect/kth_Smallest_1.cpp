@@ -36,7 +36,6 @@ int kth_Small(int a[],int l,int r,int k){
 }
 int main()
  {
-	//code
 	int t;
 	cin>>t;
 	while(t--){

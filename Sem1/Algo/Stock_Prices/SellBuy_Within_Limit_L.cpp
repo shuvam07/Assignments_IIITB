@@ -16,7 +16,7 @@ int main()
         	for(i=0;i<n;i++)
         		cin>>a[i];
         		
-            q.push_back(0);
+            	q.push_back(0);
         	for(j=1;j<n;j++){
         	    if((a[j]-a[min_i])>prof)
         	        prof = a[j]-a[min_i];
@@ -31,6 +31,7 @@ int main()
         	     min_i=q.front();
         	     q.pop_front();
         	   }
+		   cout<<prof<<" "<<min_i<<endl;
         	   
         	}
         		
