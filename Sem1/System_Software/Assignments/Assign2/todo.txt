@@ -1,0 +1,6 @@
+1
+16
+
+17a doubt execl not working /bin/ls
+17c
+18
