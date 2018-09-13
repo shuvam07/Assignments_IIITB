@@ -1,0 +1,5 @@
+strace ./19d &> trace_mknod.txt
+strace ./19e &> trace_mkfifo.txt
+
+MKFIFO USES MKNOD INTERNALLY.. 
+ALSO MKFIFO GIVES PRIVILEDGE TO CHANGE FILE PERMISSION , MKNOD DOESN'T

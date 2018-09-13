@@ -1,23 +1,34 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <string.h>
+
+#include<stdio.h>
+#include<unistd.h>
+#include<sys/types.h>
+#include<sys/wait.h>
 
 int main(){
-	char *s = "Hello World";
-	char s1[10];
-	int fd[2];
-	if(pipe(fd) == -1)
-		return -1;
-	int pid = fork();
-	if(pid == 0){
-		close(fd[1]);
-		read(fd[0],s1,11);
-		printf("%s\n",s1);
+	int pfd1[2],pfd2[2];
+	char buffer[70],reader[70];
+	pipe(pfd1);
+	pipe(pfd2);
+	if(fork()){
+		close(pfd1[0]);
+		close(pfd2[1]);
+		printf("This is parent. Message to child : ");
+		scanf(" %[^\n]s",buffer);
+		write(pfd1[1],buffer,70);	
+		printf("This is parent. Message from child : ");	
+		read(pfd2[0],reader,70);	
+		printf(" %s\n",reader);		
 	}
-	else if(pid>0){
-		close(fd[0]);
-		write(fd[1],"Yup....Done",11);
+	else{
+		close(pfd2[0]);
+		close(pfd1[1]);
+		printf("This is child. Message from parent : ");	
+		read(pfd1[0],reader,70);	
+		printf("%s\n",reader);		
+		printf("This is child. Message to parent : ");
+		scanf(" %[^\n]s",buffer);
+		write(pfd2[1],buffer,70);	
 	}
-	else
-		return 1;
+	wait(0);
+	return 0;
 }

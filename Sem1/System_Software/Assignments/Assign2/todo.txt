@@ -1,6 +1,2 @@
-1
-16
-
-17a doubt execl not working /bin/ls
-17c
-18
+message queue gets deleted automatically once read
+32c (didnt get the question)

@@ -3,9 +3,10 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
-
+       
 int main(){
 
-	char *file = "FIFO_FILE";
-	mknod(file, S_IFIFO | 0666, 0);
+	char *file = "FIFO_FILE_MKF";
+	mkfifo(file, 0666);
+
 }
