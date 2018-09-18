@@ -32,6 +32,7 @@ int main(){
 				lseek(fd,-i-1,SEEK_CUR);
 				write(fd,string,strlen(string));
 				printf("size = %d\n",i-strlen(string));
+				
 				for(int j=0;j<i-strlen(string);j++)
 					space[k++]=' ';
 				space[k]='\0';

@@ -7,6 +7,7 @@
 #define MAX 50
 
 #define ACC_DET_PATH "acc_det.txt"
+#define JOINT_ACC_DET_PATH "joint_acc_det.txt"
 #define ADMIN_UNAME "admin"
 #define ADMIN_PASS "admin"
 
@@ -14,6 +15,7 @@
 
 
 int account_id = 12454;
+int joint_account_id = 10000;
 
 struct account{
 	char name[MAX];
@@ -35,11 +37,138 @@ void signUp();
 void admin();
 void openScreen();
 void createAccount();
+void password_change();
+void view_details();
 
 
-void password_change(char name[MAX]){
+void depositInJoint(int acc_id){
+	char filename[MAX],buff[MAX];
+	sprintf(filename,"%d.txt",acc_id);
+	int fd=open(filename,O_RDWR);
+	struct flock lock;
+	lock.l_type=F_WRLCK;
+	fcntl(fd,F_SETLKW,&lock);
+	read(fd,buff,20);
+	int bal = atoi(buff),amt;
+	printf("\nEnter amount to be deposited : ");
+	scanf("%d",&amt);
+	bal+=amt;
+	lseek (fd,0,0);
+	sprintf(buff, "%d", bal);
+	write(fd,buff,strlen(buff));
+	lock.l_type = F_UNLCK;
+    fcntl (fd, F_SETLKW, &lock);
+    close(fd);
+    return;
+}
+
+void withdrawFromJoint(int acc_id){
+	char filename[MAX],buff[MAX];
+	sprintf(filename,"%d.txt",acc_id);
+	int fd=open(filename,O_RDWR);
+	struct flock lock;
+	lock.l_type=F_WRLCK;
+	fcntl(fd,F_SETLKW,&lock);
+	read(fd,buff,20);
+	int bal = atoi(buff),amt;
+	printf("\nEnter amount to be withdrawn : ");
+	scanf("%d",&amt);
+	if(amt>bal){
+		printf("Sorry the maximum you can withdraw is %d\n",bal);
+	}
+	else{
+		bal-=amt;
+		lseek (fd,0,0);
+		sprintf(buff, "%d", bal);
+		write(fd,buff,strlen(buff));
+	}
+	// printf("Press enter to unlock");
+	// getchar();
+	lock.l_type = F_UNLCK;
+    fcntl (fd, F_SETLKW, &lock);
+    close(fd);
+    return;
+}
+
+int getBalanceForJoint(int acc_id){
+	char bal[10];
+	char filename[MAX];
+	sprintf(filename,"%d.txt",acc_id);
+	int fd = open(filename,O_RDONLY);
+	struct flock lock;
+	lock.l_type=F_RDLCK;
+	fcntl(fd,F_SETLKW,&lock);
+	read(fd,bal,10);
+	lock.l_type = F_UNLCK;
+    fcntl (fd, F_SETLKW, &lock);
+	close(fd);
+	return atoi(bal);
+}
+
+void getMenuForJoint(char name[MAX],int acc_id){
+	int op;
+	while(1){
+		printf("\n\n1: Deposit\n");
+		printf("2: Withdraw\n");
+		printf("3: Balance Enquiry\n");
+		printf("4: Password Change\n");
+		printf("5: View details\n");
+		printf("6: Exit\n\n");
+		printf("Choose option : ");
+		scanf("%d",&op);
+		switch(op){
+			case 1: depositInJoint(acc_id);
+					break;
+			case 2: withdrawFromJoint(acc_id);
+					break;
+			case 3: printf("\nBalance : %d\n", getBalanceForJoint(acc_id));
+					break;
+			case 4: password_change(name,JOINT_ACC_DET_PATH);
+					 break;
+			case 5: view_details(acc_id,JOINT_ACC_DET_PATH);
+					break;
+			default:openScreen();
+		}
+	}
+	
+}
+
+void JointLogin(){
+	char name[MAX],pass[MAX];
+	printf("\nEnter username: ");
+	scanf("%s",name);
+	printf("Enter password: ");
+	scanf("%s",pass);
+	int acc_id=1;
+	if((acc_id = checkDetails(name,pass,JOINT_ACC_DET_PATH))>0){
+		getMenuForJoint(name,acc_id);
+	}
+	else{
+		printf("\nSorry account doesn't exits\n");
+		openScreen();
+	}
+}
+
+void joint_acc(){
+	int fd = open(JOINT_ACC_DET_PATH,O_CREAT|O_RDWR,0777),acc_id;
+	char name[MAX],pass[MAX];
+	printf("\nEnter username: ");
+	scanf("%s",name);
+	printf("\nEnter password: ");
+	scanf("%s",pass);
+	if((acc_id = addEntry(name,pass,-1,JOINT_ACC_DET_PATH))==0){
+		printf("Account already exits please login\n");
+		openScreen();
+	}
+	else{
+		printf("\nAccount created Successfully\n");
+		getMenuForJoint(name,acc_id);
+	}
+}
+
+void password_change(char name[MAX],char filePath[MAX]){
 	char pass[MAX];
-	int fd = open(ACC_DET_PATH,O_RDWR);
+	int fd = open(filePath,O_RDWR);
 	int i=0,k=0;char c;
 	char space[MAX];
 	char buff[MAX],details[MAX];
@@ -83,8 +212,8 @@ void password_change(char name[MAX]){
 }
 
 
-void getUsernamesFromId(int acc_id){
-	int fd = open(ACC_DET_PATH,O_RDWR);
+void getUsernamesFromId(int acc_id,char filePath[MAX]){
+	int fd = open(filePath,O_RDWR);
 	int i=0;char c;
 	char buff[MAX],filename[MAX];
 	while(1){
@@ -112,9 +241,9 @@ void getUsernamesFromId(int acc_id){
 	return;
 }
 
-void view_details(int acc_id){
+void view_details(int acc_id,char filePath[MAX]){
 	printf("\nAccount Details --- \n\nAccount holder(s) : ");
-	getUsernamesFromId(acc_id);
+	getUsernamesFromId(acc_id,filePath);
 	printf("\nBalance : %d",getBalance(acc_id));
 }
 
@@ -159,8 +288,8 @@ void withdraw(int acc_id){
 	return;
 }
 
-void checkIdAndRemoveFile(int acc_id){
-	int fd = open(ACC_DET_PATH,O_RDWR);
+void checkIdAndRemoveFile(int acc_id,char filePath[MAX]){
+	int fd = open(filePath,O_RDWR);
 	int i=0;char c;
 	char buff[MAX],filename[MAX];
 	while(1){
@@ -190,8 +319,8 @@ void checkIdAndRemoveFile(int acc_id){
 	return;
 }
 
-void deleteEntry(char username[MAX]){
-	int fd = open(ACC_DET_PATH,O_RDWR);
+void deleteEntry(char username[MAX],char filePath[MAX]){
+	int fd = open(filePath,O_RDWR);
 	int i=0;char c;
 	char buff[MAX];
 	while(1){
@@ -210,7 +339,7 @@ void deleteEntry(char username[MAX]){
 				lseek(fd,-i-1,SEEK_CUR);
 				write(fd,"NULL NULL NULL\n",13);
 				close(fd);
-				checkIdAndRemoveFile(acc_id);
+				checkIdAndRemoveFile(acc_id,filePath);
 			}
 			i=0;
 		}
@@ -226,24 +355,25 @@ void createAccFile(){
 	open(ACC_DET_PATH,O_CREAT|O_RDWR,0777);
 }
 
-int addEntry(char name[MAX],char pass[MAX]){
+int addEntry(char name[MAX],char pass[MAX],int acc_id,char filePath[MAX]){
 	char details[200],buff[200];
 	
 	struct  account det;
 	
-	if(checkAccExists(name,&det)){
+	if(checkAccExists(name,&det,filePath)){
 		printf("Account already Exists please login\n");
 		return 0;
 	}
 	else{
 		// printf("Account doesn't Exists\n");
-		int fd = open(ACC_DET_PATH,O_RDWR|O_APPEND);
-		sprintf(details, "%s %s         %d\n", name,pass,account_id);
+		int fd = open(filePath,O_RDWR|O_APPEND);
+		acc_id = acc_id > 0?acc_id : account_id;
+		sprintf(details, "%s %s         %d\n", name,pass,acc_id);
 		write(fd,details,strlen(details));
 		close(fd);
-		fd = open(ACC_DET_PATH,O_RDWR|O_APPEND);
+		fd = open(filePath,O_RDWR|O_APPEND);
 		read(fd,buff,200);
-		// printf("buff %s\n",buff);
+		printf("id %d\n",acc_id);
 		createAccount(account_id);
 		account_id++;
 		close(fd);
@@ -257,7 +387,7 @@ void addAccount(){
 	scanf("%s",name);
 	printf("\nEnter password: ");
 	scanf("%s",pass);
-	addEntry(name,pass);
+	addEntry(name,pass,-1,ACC_DET_PATH);
 	// createAccount();
 }
 
@@ -276,14 +406,14 @@ void deleteAccount(){
 	char uname[MAX];
 	printf("\nEnter accound username to be deleted : ");
 	scanf("%s",uname);
-	deleteEntry(uname);
+	deleteEntry(uname,ACC_DET_PATH);
 	printf("Account Deleted Successfully !! \n");
 	//remove(filename);
 }
 
-void searchAccounts(){
-	printf("\n\nAll Account Details ---\n");
-	int fd = open(ACC_DET_PATH,O_RDWR);
+void searchAccounts(char filePath[MAX]){
+	// printf("\n\nAll Account Details ---\n");
+	int fd = open(filePath,O_RDWR);
 	int i=0;
 	char c;
 	char buff[MAX];
@@ -332,8 +462,12 @@ void getAdminMenu(){
 					break;
 			case 3: ;
 					break;
-			case 4: searchAccounts();
-					 break;
+			case 4: {
+						printf("\nSingle User Accounts --- \n");
+						searchAccounts(ACC_DET_PATH);
+						printf("\nJoint Accounts --- \n");
+						searchAccounts(JOINT_ACC_DET_PATH);
+					}break;
 			default:openScreen();
 		}
 	}
@@ -357,9 +491,9 @@ void getMenu(char name[MAX],int acc_id){
 					break;
 			case 3: printf("\nBalance : %d\n", getBalance(acc_id));
 					break;
-			case 4: password_change(name);
+			case 4: password_change(name,ACC_DET_PATH);
 					 break;
-			case 5: view_details(acc_id);
+			case 5: view_details(acc_id,ACC_DET_PATH);
 					break;
 			default:openScreen(acc_id);
 		}
@@ -367,8 +501,8 @@ void getMenu(char name[MAX],int acc_id){
 	
 }
 
-int checkDetails(char name[MAX],char pass[MAX]){
-	int fd = open(ACC_DET_PATH,O_RDONLY);
+int checkDetails(char name[MAX],char pass[MAX],char filepath[MAX]){
+	int fd = open(filepath,O_RDONLY);
 	int i=0;char c;
 	char buff[MAX];
 	while(1){
@@ -398,8 +532,8 @@ int checkDetails(char name[MAX],char pass[MAX]){
 	return 0;
 }
 
-int checkAccExists(char name[MAX],struct account *det){
-	int fd = open(ACC_DET_PATH,O_RDWR);
+int checkAccExists(char name[MAX],struct account *det,char filePath[MAX]){
+	int fd = open(filePath,O_RDWR);
 	int i=0;char c;
 	char buff[MAX];
 	while(1){
@@ -428,6 +562,7 @@ int checkAccExists(char name[MAX],struct account *det){
 }
 
 void createAccount(int account_id){
+	printf("Hello\n");
 	char filename[MAX];
 	char balance[MAX];
 	sprintf(filename,"%d.txt",account_id);
@@ -445,7 +580,7 @@ void signUp(){
 	scanf("%s",name);
 	printf("\nEnter password: ");
 	scanf("%s",pass);
-	if((acc_id = addEntry(name,pass))==0){
+	if((acc_id = addEntry(name,pass,-1,ACC_DET_PATH))==0){
 		printf("Account already exits please login\n");
 		openScreen();
 	}
@@ -463,7 +598,7 @@ void login(){
 	printf("Enter password: ");
 	scanf("%s",pass);
 	int acc_id=1;
-	if((acc_id = checkDetails(name,pass))>0){
+	if((acc_id = checkDetails(name,pass,ACC_DET_PATH))>0){
 		getMenu(name,acc_id);
 	}
 	else{
@@ -492,7 +627,9 @@ void openScreen(){
 	printf("1: Sign Up\n");
 	printf("2: Normal User Login\n");
 	printf("3: Admin Login \n");
-	printf("4: Exit\n\n\n");
+	printf("4: New Joint Account\n");
+	printf("5: Joint Account Login\n");
+	printf("6: Exit\n\n\n");
 	printf("Choose option : ");
 	scanf("%d",&op);
 	switch(op){
@@ -502,11 +639,48 @@ void openScreen(){
 				break;
 		case 3: admin();
 				break;
+		case 4: joint_acc();
+				break;
+		case 5: JointLogin();
+				break;
 		default: exit(1);
 	}
 }
 
+void getMaxAccountId(int *max_id,char filePath[MAX]){
+	int fd = open(filePath,O_RDWR);
+	int i=0;char c;
+	char buff[MAX],filename[MAX];
+	while(1){
+		int rd = read(fd,&c,1);
+		if(rd<=0){
+			break;
+		}	
+		else if(c=='\n'){
+			buff[i]='\0';
+			char *uname = strtok (buff," ");
+			strtok (NULL," ");
+			int id = atoi(strtok (NULL," "));
+			if(id>*max_id)
+				*max_id = id;
+			i=0;
+		}
+		else{
+			buff[i++]=c;
+		}	
+	}
+	close(fd);
+	return;
+}
+
 int main(){
+	int max_id=-1;
 	createAccFile();
+
+	getMaxAccountId(&max_id,ACC_DET_PATH);
+	getMaxAccountId(&max_id,JOINT_ACC_DET_PATH);
+	if(max_id != -1)
+		account_id = max_id + 1;
+	
 	openScreen();
 }
