@@ -1,2 +1,3 @@
 NULL NULL NUL54      4
-us02 abcd 12455         5
+us02 wxyz         12455
+us01 abcd         12456
