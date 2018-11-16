@@ -22,25 +22,24 @@ int dp [15 + 1][250 + 1];
 
 int rec(int mov , int pack){
 
-    if(mov == m){                       // all movers finshed their work
-        if(pack != p) return 1e18;      // not all packages are moved (invalid case)
-        return 0;                       // all packages are moved (valid case)
+    if(mov == m){                       
+        if(pack != p) return INT_MAX;      
+        return 0;                       
     }
 
-    if(pack == p) return 0;             // all packages are moved (valid case)
+    if(pack == p) return 0;            
 
-    int &st = dp[mov][pack];            // reference to this state in memory
+    int &st = dp[mov][pack];            
     if(st != -1) return st;
 
     int sum = 0;
-    int ans = 1e18;
+    int ans = INT_MAX;
 
-    ans = rec(mov + 1, pack);           // this mover will not carry any thing
 
     for(int i = pack; i < p; i++){
 
-        sum += arr[i];                  // this mover will take carry this package
-        ans = min (ans , max(sum , rec(mov + 1, i + 1)) );      //minimize the anwer such that all packages are moved
+        sum += arr[i];                  
+        ans = min (ans , max(sum , rec(mov + 1, i + 1)) );      
     }
 
     return st = ans;
@@ -48,16 +47,15 @@ int rec(int mov , int pack){
 
 int main()
 {
-    //ios::sync_with_stdio(false);cin.tie(0);
 
 
     cin >>   m >> p;
 
-    memdp(dp);              // set all the states to -1 (haven't stored values yet)
+    memdp(dp);              
 
     for(int i = 0; i < p; i++) cin >> arr[i];
 
-    cout << rec(0 , 0);
+    cout << rec(0 , 0) << endl;
 
 
     return 0;
