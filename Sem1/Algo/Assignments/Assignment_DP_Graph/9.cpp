@@ -1,13 +1,12 @@
 #include<bits/stdc++.h> 
 using namespace std; 
   
-int min(int x, int y, int z) 
+
+int editDistDP(string str1, string str2,int insert,int remove,int replace) 
 { 
-    return min(min(x, y), z); 
-} 
-  
-int editDistDP(string str1, string str2, int m, int n,int insert,int remove,int replace) 
-{ 
+    int m=str1.size();
+    int n=str2.size();
+
     int dp[m+1][n+1]; 
   
     for (int i=0; i<=m; i++) 
@@ -15,19 +14,19 @@ int editDistDP(string str1, string str2, int m, int n,int insert,int remove,int 
         for (int j=0; j<=n; j++) 
         { 
             if (i==0) 
-                dp[i][j] = insert;  
+                dp[i][j] = j*insert;  
 
             else if (j==0) 
-                dp[i][j] = remove; 
+                dp[i][j] = i*remove; 
 
             else if (str1[i-1] == str2[j-1]) 
                 dp[i][j] = dp[i-1][j-1]; 
   
              
             else
-                dp[i][j] = 1 + min(dp[i][j-1] + insert,  
-                                   dp[i-1][j] + remove,   
-                                   dp[i-1][j-1] + replace
+                dp[i][j] = min(dp[i][j-1] + insert,  
+                                   min(dp[i-1][j] + remove,   
+                                   dp[i-1][j-1] + replace)
                                    );  
         } 
     } 
@@ -49,11 +48,9 @@ int main()
     reverse(s2.begin(),s2.end());
 
     cin>>insert>>remove>>replace; 
-
-    cout<<s1<<endl<<s2<<endl;
   
-    cout << min(editDistDP(s1, s2 , n/2, n/2, insert , remove , replace),
-                editDistDP(s2, s1 , n/2, n/2, insert , remove , replace))<<endl; 
+    cout << min(editDistDP(s1, s2 , insert , remove , replace),
+                editDistDP(s2, s1 , insert , remove , replace))<<endl; 
 
   
     return 0; 
