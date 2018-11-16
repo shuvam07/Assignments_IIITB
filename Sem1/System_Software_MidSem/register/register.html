@@ -1,0 +1,94 @@
+<!-- contribution of SAUMYA to write this code-->
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Sign in or Register|eBay</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes ">
+		<link rel="stylesheet" href="css/register_style.css">
+		<script src="jquery-3.3.1/jquery.min.js"></script>
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <link rel="icon" href="ebayFav.ico">
+	</head>
+	<body bgcolor="#F7F7F7">
+			<div id="header">
+				<br>
+				<center><img src="images/logo.png" alt="eBay" align="center" height="48" width="135"></center>
+			</div>
+			<br>
+		<div id="container">
+
+					<a href="http://localhost:5224/ebaytester/login.html"><img src="images/signin.png" alt="eBay" align="center" height="48" width="200" id="signin"></a></li>
+					<a href="http://localhost:5224/ebaytester/register.html"><img src="images/register.png" alt="eBay" align="center" height="48" width="200" id="register"></a></li>
+
+			<br>
+			<br>
+			<div id="form">
+					<form  id="register_form">
+						<br>
+
+						<p id="p1">First name <span id="tab">Last name</span></p>
+						<input type="text" class="text" name="fname" id="text1" required >
+						<input type="text" class="text" name="lname" id="text2" required >
+						<br><br>
+						<p id="p1">Email address</p>
+						<input type="email" class="email" name="user_email" id="user_email" required>
+						<br><br>
+						<p id="p1">Password</p>
+						<div>
+							<input type="password" class="password" name="user_password" id="user_password" required>
+						</div>
+						<p class="p2">By clicking <b>Register</b>, you agree that you have read and accepted our <a id="a" href="#">User Agreement, User Privacy Notice, Rules and Policies </a>
+						and the <a id="a" href="#">UPaisaPay User Agreement</a>.</p>
+						<input type="submit" value="Register" class="Register" >
+
+					</form>
+				</div>
+		</div>
+		<script src="ajax/register_ajax.js"></script>
+	<!-- <script>
+			  $('#register_form').submit(function(){
+				  var myobj={"user_id":0,
+						   "user_fname":$('#text1').val(),
+						   "user_lname":$('#text2').val(),
+						   "user_email":$('#user_email').val(),
+						   "user_password": $('#user_password').val(),
+						   "user_country":"",
+						   "user_address":"",
+						   "user_city":"",
+				           "user_state":"",
+				           "user_pincode":8888,
+				           "user_phone":""};
+				var myjson=JSON.stringify(myobj);
+				console.log(myjson);
+
+							  $.ajax({
+								  type :"POST",
+								  url: "http://localhost:5224/ebaytester/webapi/user/register",
+								  data : myjson,
+								  contentType: "application/json;",
+								  success: function(response){
+									  console.log(response)
+
+									 if(response!=null)
+										  {  localStorage.clear();
+								           localStorage.fName=response.user_fname;
+								           localStorage.lName=response.user_lname;
+								           localStorage.email=response.user_email;
+								           localStorage.user_PINCODE=9999;
+										        window.location="http://localhost:5224/ebaytester/home.html";
+										  }
+									  else
+										  {
+										   alert("already exist");
+										   window.location="http://localhost:5224/ebaytester/register.html";
+										  }
+								  }
+							  });
+
+			  return false;
+		  });
+		</script> -->
+	</body>
+
+</html>

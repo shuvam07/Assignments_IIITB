@@ -90,7 +90,7 @@ struct Node* construct_tree2(int st,int end){
 	struct Node *root = newNode(post[postIdx++]);
 	if(st==end)
 		return root;
-	int idx = search_idx1(pre[ostIdx-1]);
+	int idx = search_idx1(pre[postIdx-1]);
 	root->right = construct_tree1(idx+1,end);
 	root->left = construct_tree1(st,idx-1);
 	return root;

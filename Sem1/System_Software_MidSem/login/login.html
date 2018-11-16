@@ -1,0 +1,54 @@
+<!-- contribution of Bhavna to write this code-->
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Sign in or Register|eBay</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes ">
+		<link rel="stylesheet" href="css/login_style.css">
+		 <script src="jquery-3.3.1/jquery.min.js"></script>
+    <!-- <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script> -->
+		 <link rel="icon" href="ebayFav.ico">
+	</head>
+	<body>
+		<div id="div1">
+			<div id="container">
+				<div id="header">
+					<img src="images/logo.png" alt="eBay" align="Center" height="48" width="135">
+				</div>
+				<div id="box">
+					<div id="signin" class="in">
+						<p><a href="#">Sign in</a></p>
+					</div>
+					<div id="register" class="in">
+						<p><a href="register.html">Register</a></p>
+					</div>
+					<div id="form">
+							<form   id="login_form" id="user_login_form">
+								<input type="text" class="text" placeholder="Email or Username" name="user_email" id="user_email">
+								<input type="password" class="pwd" placeholder="Password" name="user_password" id="user_password">
+								<p id="p1">By signing into eBay.in you consent to eBay sharing your personal information with eBay.in.</p>
+								<input id="login" type="submit" value="Sign in" class="submit">
+								<br>
+								<p id="demo"></p>
+							</form>
+					</div>
+					<div id="checkbox">
+						<input type="checkbox" name="Stay sign in" value="Car" checked>Stay Signed in
+					</div>
+					<div id="temppwd" class="pword">
+						<a href="#">Text a temporary password</a>
+					</div>
+					<div id="rstpwd" class="pword">
+						<p><a href="#">Reset your password</a></p>
+					</div>
+					<p id="lastpara" class="pword">Using a public or shared device? Uncheck to protect your account.<a href="#">Learn more</a><p>
+				</div>
+			</div>
+		</div>
+		<div id="div2">
+			<p>© 2018 eBay India Private Limited. <a href="#">User Agreement</a>,<a href="#">User Privacy Notice</a>,<a href="#">Cookies</a>.</p>
+		</div>
+		<script src="ajax/login_ajax.js"></script>
+	</body>
+</html>
