@@ -1,3 +1,9 @@
+// Problem:- Given a graph where each vertex has an associated weight,find a pair
+// of vertices i,j such that j is reachable from i and w(j) - w(i) is maximum
+
+// Brief idea:- Do a dfs from every node of the graph. For each node keep track of the max descendant value
+// Then when this has been computed just iterate over all vertices checking the difference between
+// the max_descendant_value and the nodes weight, and pick the maximum.s
 #include<bits/stdc++.h>
 #define pb push_back
 using namespace std;
@@ -61,10 +67,8 @@ int main()
     }
     for(int i = 0; i < n; i++)
     {
-        if(!visited[i])
-        {
-            dfs(nodes[i]);
-        }
+        dfs(nodes[i]);
+        memset(visited,false,sizeof(visited));
     }
     int ans = INT_MIN;
     for(int i = 0; i < n; i++)
